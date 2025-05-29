@@ -37,11 +37,11 @@ Se transformaron los tipos de datos y se extrajo la fecha del timestamp.
 Se identificaron valores faltantes y se validó su impacto.
 
 ## Paso 2: Exploración de datos
-Se identificaron eventos y usuarios únicos.
+Se identificaron 5 eventos y 7551 usuarios únicos.
 
-Promedio de eventos por usuario: Z.XX.
+Promedio de eventos por usuario: 32.28
 
-El rango temporal cubierto fue de YYYY-MM-DD a YYYY-MM-DD.
+El rango temporal cubierto fue de 2019-07-25 a 2019-08-07
 
 Al trazar la distribución de eventos por fecha, se observó que los primeros días tenían registros incompletos.
 
@@ -65,7 +65,7 @@ Se calculó la proporción de usuarios que pasaron de una etapa a la siguiente.
 
 Etapa con mayor pérdida: entre Add to Cart y Checkout.
 
-Solo un X% de los usuarios completó el recorrido completo hasta el pago.
+Solo un 47.68% de los usuarios completó el recorrido completo hasta el pago.
 
 Estos resultados destacan áreas críticas para mejoras en la experiencia de usuario o incentivos de conversión.
 
