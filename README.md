@@ -135,5 +135,5 @@ Jupyter Notebook
 
 Estadística inferencial (prueba de proporciones, corrección por comparaciones múltiples)
 
-Impacto del análisis:
+## Impacto del análisis:
 Este análisis proporcionó evidencia crítica para decisiones de producto, ayudando a la empresa a evitar cambios visuales que no aportaban valor al usuario. Asimismo, el embudo permitió identificar cuellos de botella clave en la experiencia de compra, facilitando decisiones más informadas para aumentar la conversión.
