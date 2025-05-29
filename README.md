@@ -37,7 +37,7 @@ Se transformaron los tipos de datos y se extrajo la fecha del timestamp.
 Se identificaron valores faltantes y se validó su impacto.
 
 ## Paso 2: Exploración de datos
-Se identificaron más de XXX eventos y YYY usuarios únicos.
+Se identificaron eventos y usuarios únicos.
 
 Promedio de eventos por usuario: Z.XX.
 
