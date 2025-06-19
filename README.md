@@ -1,289 +1,224 @@
-# Análisis de comportamiento de usuario y test A/A/B en una app de productos alimenticios
+# 📱 Caso de Estudio: Análisis del Comportamiento de Usuario y Test A/A/B en una App de Productos Alimenticios
 
-## ES Español
+## 🇪🇸 Español
 
-Descripción del proyecto:
+### Descripción del Proyecto  
+Trabajé como analista de datos para una startup dedicada a la venta de productos alimenticios a través de su aplicación móvil. El objetivo fue comprender el comportamiento de los usuarios y evaluar cómo un cambio en el diseño (tipografía) afecta la conversión en la app.
 
-En este proyecto, trabajé como analista de datos para una startup dedicada a la venta de productos alimenticios a través de su aplicación móvil. El objetivo principal fue comprender cómo los usuarios interactúan con la aplicación y cómo las decisiones de diseño pueden impactar sus comportamientos, específicamente en relación con la conversión de ventas.
+### Objetivos del Proyecto
+- Analizar el embudo de conversión para detectar puntos de fricción.
+- Evaluar un experimento A/A/B relacionado con un cambio en la tipografía.
+- Validar la correcta segmentación de los grupos de prueba.
+- Proporcionar recomendaciones basadas en datos para mejorar la conversión.
 
-## Objetivos principales:
-Analizar el embudo de conversión para detectar puntos de fricción en el recorrido del usuario.
+### Fuente de Datos
 
-Evaluar un experimento A/A/B diseñado para medir el impacto de un cambio en la tipografía de la interfaz.
+| Dataset           | Descripción                                  |
+|-------------------|----------------------------------------------|
+| `logs_exp_us.csv` | Registro de eventos de usuario en la app     |
 
-Validar la correcta segmentación de los grupos de prueba.
+**Variables clave:**  
+- `event_name`: tipo de acción del usuario  
+- `device_id_hash`: identificador único de usuario  
+- `event_timestamp`: fecha y hora del evento  
+- `exp_id`: grupo experimental (246 y 247 = control, 248 = prueba)
 
-Proporcionar recomendaciones basadas en datos para mejorar la experiencia del usuario.
+---
 
-## Datos utilizados:
-Dataset: logs_exp_us.csv
+### 🔎 Análisis Exploratorio
 
-Cada registro representa un evento de usuario dentro de la aplicación.
+#### Paso 1: Lectura y Preparación de Datos
+- Carga y limpieza inicial.
+- Renombramiento de columnas.
+- Conversión de tipos y extracción de fecha.
+- Revisión de valores nulos.
 
-Campos principales:
+#### Paso 2: Exploración de Datos
+- 7,551 usuarios únicos y 5 eventos principales.
+- Promedio: **32.28 eventos por usuario**.
+- Rango temporal: **2019-07-25 a 2019-08-07**.
+- Se detectaron registros incompletos al inicio, por lo que se aplicó una **fecha de corte** para minimizar sesgos.
 
-event_name: tipo de acción realizada por el usuario.
+---
 
-device_id_hash: identificador único del usuario.
+### 🔁 Análisis del Embudo de Conversión
 
-event_timestamp: marca de tiempo del evento.
+**Flujo identificado:**
+1. App Launch  
+2. Product View  
+3. Add to Cart  
+4. Checkout  
+5. Payment Success
 
-exp_id: grupo experimental (246 y 247 son control; 248 es prueba).
+- Se calculó la proporción de usuarios que avanzaron entre etapas.
+- Mayor pérdida: entre **Add to Cart → Checkout**.
+- Solo **47.68%** de los usuarios completó el flujo completo.
 
-## Paso 1: Lectura y preparación de datos
-Se cargaron y revisaron los datos.
+🔔 *Implicación:* Puntos críticos de abandono antes del pago → oportunidad para mejoras en UX o incentivos de conversión.
 
-Se renombraron columnas para facilitar la lectura.
+---
 
-Se transformaron los tipos de datos y se extrajo la fecha del timestamp.
+### 🧪 Evaluación del Test A/A/B
 
-Se identificaron valores faltantes y se validó su impacto.
+#### Validación del Test A/A
+- Comparación entre grupos 246 y 247 (tipografía original).
+- Se aplicaron pruebas de proporciones para cada evento.
+- ✅ Resultado: **sin diferencias significativas** → segmentación válida.
 
-## Paso 2: Exploración de datos
-Se identificaron 5 eventos y 7551 usuarios únicos.
+#### Evaluación del Grupo B (tipografía nueva)
+- Comparación del grupo 248 contra:
+  - Cada grupo de control por separado
+  - Grupos de control combinados
+- Eventos clave: visualización de productos, agregar al carrito, completar compra.
+- Resultado:  
+  - **Ligera caída en interacción** en algunos eventos con la nueva fuente.  
+  - Diferencias **no significativas estadísticamente** en la mayoría de los casos.
 
-Promedio de eventos por usuario: 32.28
+---
 
-El rango temporal cubierto fue de 2019-07-25 a 2019-08-07
+### 📊 Prueba de Hipótesis y Corrección por Comparaciones Múltiples
 
-Al trazar la distribución de eventos por fecha, se observó que los primeros días tenían registros incompletos.
+- H₀: No hay diferencia entre los grupos.  
+- H₁: Hay diferencias significativas.  
+- α original: 0.05  
+- Se realizaron múltiples pruebas → se aplicó **corrección de Bonferroni**.  
+- Nuevo α ajustado: α / N  
+- 🔍 Resultado final: **las diferencias dejaron de ser significativas tras la corrección**.
 
-Se estableció una fecha de corte para asegurar integridad de los datos, minimizando el sesgo.
+---
 
-## Paso 3: Análisis del embudo de conversión
-Se identificaron los eventos más comunes y su orden lógico en el flujo de usuario.
-Ejemplo:
+### ✅ Conclusiones
+- El embudo evidenció puntos de fuga importantes antes del pago → se deben optimizar esas etapas.
+- El test A/A/B demostró:
+  - Segmentación correcta en los grupos de control.
+  - El cambio de tipografía **no generó mejoras significativas**.
+- **Recomendación:** Postergar o reconsiderar el cambio de diseño visual, ya que podría suponer un riesgo sin retorno claro.
 
-App Launch
+---
 
-Product View
+### 🛠️ Herramientas Utilizadas
+- Python (pandas, matplotlib, seaborn, scipy, statsmodels)
+- Jupyter Notebook
+- Estadística inferencial: prueba de proporciones, corrección Bonferroni
 
-Add to Cart
+---
 
-Checkout
+### 📈 Impacto del Análisis
+- Se evitó implementar un cambio visual sin beneficios claros.
+- Se identificaron cuellos de botella en el recorrido de compra.
+- Se proporcionaron insights para decisiones informadas sobre diseño y conversión.
 
-Payment Success
+---
 
-Se calculó la proporción de usuarios que pasaron de una etapa a la siguiente.
+## 🇺🇸 English
 
-Etapa con mayor pérdida: entre Add to Cart y Checkout.
+# 📱 Case Study: User Behavior Analysis and A/A/B Testing in a Food Product App
 
-Solo un 47.68% de los usuarios completó el recorrido completo hasta el pago.
+### Project Description  
+I worked as a data analyst for a startup focused on selling food products through a mobile app. The goal was to understand user behavior and assess how a design change (typography) affects conversion.
 
-Estos resultados destacan áreas críticas para mejoras en la experiencia de usuario o incentivos de conversión.
+### Project Objectives
+- Analyze the conversion funnel to identify friction points.
+- Evaluate an A/A/B experiment related to a typography change.
+- Validate proper segmentation of experimental groups.
+- Provide data-driven recommendations for improving conversion.
 
-## Paso 4: Evaluación del test A/A/B
-### Validación del test A/A
-Se compararon los grupos 246 y 247 (ambos con tipografía original).
+### Data Source
 
-Para cada evento:
+| Dataset           | Description                                  |
+|-------------------|----------------------------------------------|
+| `logs_exp_us.csv` | User event logs from the app                 |
 
-Se calcularon proporciones de usuarios que realizaron la acción.
+**Key variables:**  
+- `event_name`: type of user action  
+- `device_id_hash`: unique user identifier  
+- `event_timestamp`: event timestamp  
+- `exp_id`: experimental group (246 and 247 = control; 248 = test)
 
-Se aplicó una prueba de hipótesis (proporciones) para validar si las diferencias eran significativas.
+---
 
-Resultado: No se detectaron diferencias significativas → segmentación válida.
+### 🔎 Exploratory Analysis
 
-### Análisis del grupo B (fuente nueva)
-Se repitió el análisis para el grupo 248 (fuente nueva), comparándolo con:
+#### Step 1: Data Loading and Preparation
+- Initial data load and review.
+- Renamed columns for clarity.
+- Converted data types and extracted dates.
+- Handled and validated missing values.
 
-Cada grupo de control individualmente.
+#### Step 2: Data Exploration
+- Identified **7,551 unique users** and 5 main events.
+- Average: **32.28 events per user**.
+- Time range: **July 25 to August 7, 2019**.
+- Early days had incomplete data → applied a **cutoff date** to ensure data integrity.
 
-Ambos grupos de control combinados.
+---
 
-Eventos clave analizados:
+### 🔁 Conversion Funnel Analysis
 
-Visualización de productos
+**User flow identified:**
+1. App Launch  
+2. Product View  
+3. Add to Cart  
+4. Checkout  
+5. Payment Success
 
-Agregar al carrito
+- Calculated drop-off rates between each step.
+- Highest loss occurred between **Add to Cart → Checkout**.
+- Only **47.68%** of users completed the full journey to payment.
 
-Finalización de compra
+🔔 *Implication:* Critical friction before checkout → opportunities to optimize UX and increase conversion.
 
-Resultados:
+---
 
-Para algunos eventos, se observó una ligera caída en la interacción con la nueva tipografía.
+### 🧪 A/A/B Test Evaluation
 
-Sin embargo, la mayoría de las diferencias no fueron estadísticamente significativas.
+#### A/A Test Validation
+- Compared groups 246 and 247 (original typography).
+- Applied proportion tests for each event.
+- ✅ Result: **no significant differences** → segmentation is valid.
 
-## Paso 5: Prueba de hipótesis y corrección por comparaciones múltiples
-Hipótesis nula (H₀): no hay diferencia entre los grupos.
+#### Test Group B (New Typography)
+- Compared group 248 with:
+  - Each control group separately
+  - Both control groups combined
+- Key events analyzed: product views, add to cart, purchase completion.
+- Result:  
+  - **Slight drop in engagement** for some events with the new font.  
+  - Most differences were **not statistically significant**.
 
-Hipótesis alternativa (H₁): existe una diferencia significativa entre los grupos.
+---
 
-Nivel de significancia original: α = 0.05.
+### 📊 Hypothesis Testing and Multiple Comparison Correction
 
-Se realizaron múltiples pruebas (≈ N pruebas).
+- H₀: No difference between groups.  
+- H₁: Significant difference exists.  
+- Original α: 0.05  
+- Multiple tests conducted → **Bonferroni correction applied**  
+- Adjusted α: α / N  
+- 🔍 Final result: **differences became non-significant after correction**
 
-Se aplicó la corrección de Bonferroni para controlar el error tipo I:
+---
 
-Nuevo α ajustado: α/N.
+### ✅ Conclusions
+- Funnel revealed major drop-offs before checkout → requires optimization.
+- A/A/B experiment showed:
+  - Control groups behaved consistently.
+  - New typography **did not improve performance significantly**.
+- **Recommendation:** Postpone or rethink typography changes unless further evidence supports it.
 
-Tras el ajuste, las diferencias dejaron de ser significativas → no se pudo concluir que la tipografía nueva afecte el comportamiento del usuario.
+---
 
-## Conclusiones:
-El embudo reveló puntos de abandono importantes en la etapa previa al checkout, lo que indica una oportunidad clara de mejora en la conversión.
+### 🛠️ Tools Used
+- Python (pandas, matplotlib, seaborn, scipy, statsmodels)
+- Jupyter Notebook
+- Inferential statistics: proportion tests, Bonferroni correction
 
-El experimento A/A/B mostró que:
+---
 
-Los grupos de control fueron consistentes.
-
-El grupo con tipografía nueva no mostró mejoras significativas.
-
-Recomendación: Postergar o repensar el cambio tipográfico, ya que no aporta un beneficio claro y puede introducir riesgo innecesario.
-
-## Herramientas utilizadas:
-Python (pandas, matplotlib, seaborn, scipy, statsmodels)
-
-Jupyter Notebook
-
-Estadística inferencial (prueba de proporciones, corrección por comparaciones múltiples)
-
-## Impacto del análisis:
-Este análisis proporcionó evidencia crítica para decisiones de producto, ayudando a la empresa a evitar cambios visuales que no aportaban valor al usuario. Asimismo, el embudo permitió identificar cuellos de botella clave en la experiencia de compra, facilitando decisiones más informadas para aumentar la conversión.
-
-
-# User behavior analysis and A/A/B testing in a food product app
-
-## US English
-
-Project description:
-
-In this project, I worked as a data analyst for a startup dedicated to selling food products through its mobile app. The main objective was to understand how users interact with the app and how design decisions can impact their behavior, specifically about sales conversion.
-
-## Main objectives:
-Analyze the conversion funnel to detect friction points in the user journey.
-
-Evaluate an A/A/B experiment designed to measure the impact of a change in the interface typography.
-
-Validate the correct segmentation of the test groups.
-
-Provide data-driven recommendations to improve the user experience.
-
-## Data used:
-Dataset: logs_exp_us.csv
-
-Each record represents a user event within the application.
-
-Main fields:
-
-event_name: type of action performed by the user.
-
-device_id_hash: unique user identifier.
-
-event_timestamp: event timestamp.
-
-exp_id: experimental group (246 and 247 are control; 248 is test).
-
-## Step 1: Reading and preparing data
-The data was loaded and reviewed.
-
-Columns were renamed to make them easier to read.
-
-Data types were transformed and the timestamp data was extracted.
-
-Missing values were identified and their impact was validated.
-
-## Step 2: Data exploration
-Five events and 7,551 unique users were identified.
-
-Average number of events per user: 32.28
-
-The time range covered was from July 25, 2019, to August 7, 2019.
-
-When plotting the distribution of events by date, it was observed that the first few days had incomplete records.
-
-A cut-off date was established to ensure data integrity and minimize bias.
-
-## Step 3: Conversion funnel analysis
-The most common events and their logical order in the user flow were identified.
-Example:
-
-App Launch
-
-Product View
-
-Add to Cart
-
-Checkout
-
-Payment Success
-
-The proportion of users who moved from one stage to the next was calculated.
-
-Stage with the highest loss: between Add to Cart and Checkout.
-
-Only 47.68% of users completed the entire journey to payment.
-
-These results highlight critical areas for improvements in user experience or conversion incentives.
-
-## Step 4: Evaluation of the A/A/B test
-### Validation of the A/A test
-Groups 246 and 247 (both with original typography) were compared.
-
-For each event:
-
-The proportions of users who acted were calculated.
-
-A hypothesis test (proportions) was applied to validate whether the differences were significant.
-
-Result: No significant differences were detected → valid segmentation.
-
-### Analysis of group B (new source)
-The analysis was repeated for group 248 (new source), comparing it with:
-
-Each control group individually.
-
-Both control groups combined.
-
-Key events analyzed:
-
-Product viewing
-
-Add to cart
-
-Checkout completion
-
-Results:
-
-For some events, a slight drop in interaction was observed with the new typography.
-
-However, most of the differences were not statistically significant.
-
-## Step 5: Hypothesis testing and correction for multiple comparisons
-Null hypothesis (H₀): there is no difference between the groups.
-
-Alternative hypothesis (H₁): there is a significant difference between the groups.
-
-Original significance level: α = 0.05.
-
-Multiple tests were performed (≈ N tests).
-
-The Bonferroni correction was applied to control the type I error:
-
-New adjusted α: α/N.
-
-After the adjustment, the differences were no longer significant → it could not be concluded that the new font affects user behavior.
-
-## Conclusions:
-The funnel revealed significant drop-off points in the pre-checkout stage, indicating a clear opportunity for conversion improvement.
-
-The A/A/B experiment showed that:
-
-The control groups were consistent.
-
-The group with the new typography did not show significant improvements.
-
-Recommendation: Postpone or rethink the typography change, as it does not provide a clear benefit and may introduce unnecessary risk.
-
-## Tools used:
-Python (pandas, matplotlib, seaborn, scipy, statsmodels)
-
-Jupyter Notebook
-
-Inferential statistics (proportion test, correction for multiple comparisons)
-
-## Impact of the analysis:
-This analysis provided critical evidence for product decisions, helping the company avoid visual changes that did not add value for the user. The funnel also identified key bottlenecks in the shopping experience, facilitating more informed decisions to increase conversion.
+### 📈 Impact of the Analysis
+- Prevented a design change with no user benefit.
+- Identified conversion bottlenecks in the shopping experience.
+- Informed product and UX decisions based on solid data.
 
 
 
